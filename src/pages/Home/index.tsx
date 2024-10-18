@@ -4,6 +4,7 @@ import Restaurante from '../../models/Restaurante'
 import japones from '../../assets/images/hioki.png'
 import estrela from '../../assets/images/estrela.png'
 import laDolce from '../../assets/images/laDolce.png'
+import Header from '../../components/Header'
 
 const restaurantesDaEfood: Restaurante[] = [
   {
@@ -30,6 +31,7 @@ const restaurantesDaEfood: Restaurante[] = [
 
 const Home = () => (
   <>
+    <Header />
     <ListaDeRestaurantes restaurante={restaurantesDaEfood} />
     <ListaDeRestaurantes restaurante={restaurantesDaEfood} />
     <ListaDeRestaurantes restaurante={restaurantesDaEfood} />
