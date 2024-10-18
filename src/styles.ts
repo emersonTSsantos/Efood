@@ -19,6 +19,7 @@ export const GlobalCss = createGlobalStyle`
 
   body {
     background-color: ${cores.corFundo};
+    color: ${cores.laranjaEscuro};
   }
 `
 
