@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { cores } from '../../styles'
+import { Link } from 'react-router-dom'
 
 export const CardContainer = styled.div`
   max-width: 1024px;
@@ -75,6 +76,11 @@ export const Botao = styled.button`
     background-color: #e66750;
   }
 `
+export const StyledLink = styled(Link)`
+  color: ${cores.laranjaClaro};
+  text-decoration: none;
+`
+
 export const Infos = styled.div`
   position: absolute;
   top: 16px;

@@ -10,7 +10,8 @@ import {
   AvaliacaoTexto,
   Descricao,
   Botao,
-  Infos
+  Infos,
+  StyledLink
 } from './styles'
 
 type Props = {
@@ -52,7 +53,9 @@ const Restaurantes = ({
         </AvaliacaoContainer>
       </InfoContainer>
       <Descricao>{descricao}</Descricao>
-      <Botao>Saiba mais</Botao>
+      <Botao>
+        <StyledLink to="/Perfil">Saiba mais</StyledLink>
+      </Botao>
     </Card>
   </CardContainer>
 )
