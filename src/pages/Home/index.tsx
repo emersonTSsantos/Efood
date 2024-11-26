@@ -1,41 +1,50 @@
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 import ListaDeRestaurantes from '../../components/ListaDeRestaurantes'
+import Header from '../../components/Header'
 import Restaurante from '../../models/Restaurante'
 
-import japones from '../../assets/images/hioki.png'
 import estrela from '../../assets/images/estrela.png'
-import laDolce from '../../assets/images/laDolce.png'
-import Header from '../../components/Header'
 
-const restaurantesDaEfood: Restaurante[] = [
-  {
-    id: 1,
-    imagem: japones,
-    infos: ['Destaque da semana', 'Japonesa'],
-    titulo: 'Hioki Sushi',
-    nota: '4.9',
-    imageEstrela: estrela,
-    descricao:
-      'Peça já o melhor da culinária japonesa no conforto da sua casa! Sushis frescos, sashimis deliciosos e pratos quentes irresistíveis. Entrega rápida, embalagens cuidadosas e qualidade garantida.Experimente o Japão sem sair do lar com nosso delivery!'
-  },
-  {
-    id: 2,
-    imagem: laDolce,
-    infos: [' Italiana'],
-    titulo: 'La Dolce Vita Trattoria',
-    nota: '4.6',
-    imageEstrela: estrela,
-    descricao:
-      'A La Dolce Vita Trattoria leva a autêntica cozinha italiana até você! Desfrute de massas caseiras, pizzas deliciosas e risotos incríveis, tudo no conforto do seu lar. Entrega rápida, pratos bem embalados e sabor inesquecível. Peça já!'
-  }
-]
+const Home = () => {
+  const [restaurantes, setRestaurantes] = useState<Restaurante[]>([])
 
-const Home = () => (
-  <>
-    <Header />
-    <ListaDeRestaurantes restaurante={restaurantesDaEfood} />
-    <ListaDeRestaurantes restaurante={restaurantesDaEfood} />
-    <ListaDeRestaurantes restaurante={restaurantesDaEfood} />
-  </>
-)
+  useEffect(() => {
+    const fetchRestaurantes = async () => {
+      try {
+        const response = await axios.get(
+          'https://fake-api-tau.vercel.app/api/efood/restaurantes'
+        )
+
+        setRestaurantes(
+          response.data.map((item: any) => ({
+            id: item.id,
+            imagem: item.capa,
+            infos: item.tipo ? [item.tipo] : [],
+            titulo: item.titulo,
+            nota: item.avaliacao.toString(),
+            imageEstrela: estrela,
+            descricao: item.descricao
+          }))
+        )
+      } catch (error) {
+        console.error('Erro ao buscar os restaurantes:', error)
+      }
+    }
+
+    fetchRestaurantes()
+  }, [])
+
+  return (
+    <>
+      <Header />
+      {restaurantes.length > 0 ? (
+        <ListaDeRestaurantes restaurante={restaurantes} />
+      ) : (
+        <p>Carregando restaurantes...</p>
+      )}
+    </>
+  )
+}
 
 export default Home

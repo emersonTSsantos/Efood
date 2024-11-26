@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import ImagemFundo from '../../assets/images/fundoHeader.png'
-import LaDolce from '../../assets/images/laDolce.png'
 import { cores } from '../../styles'
 
 export const Header = styled.header`
@@ -30,6 +29,18 @@ export const Logo = styled.img`
   height: 60px;
   margin: 0 auto;
 `
+export const Voltar = styled.img`
+  height: 30px;
+  margin-right: 8px;
+  padding-top: 12px;
+`
+
+export const ContainerVoltar = styled.div`
+  display: flex;
+  align-items: center; /* Alinha a imagem e o texto verticalmente no centro */
+  justify-content: center; /* Centraliza a imagem e o texto horizontalmente */
+  gap: 8px; /* Espaçamento entre a imagem e o texto */
+`
 
 export const CartInfo = styled.p`
   font-size: 18px;
@@ -45,10 +56,9 @@ export const Container = styled.div`
 
 export const Hero = styled.section`
   position: relative;
-  background-image: url(${LaDolce});
   background-size: cover;
   background-position: center;
-  height: 350px;
+  height: 450px;
   display: flex;
   align-items: center;
 
@@ -72,21 +82,21 @@ export const Hero = styled.section`
 export const PerfilRestaurante = styled.h3`
   padding-top: 24px;
   margin-bottom: 260px;
-  color: ${cores.cinzaClaro};
+  font-size: 24px;
+  color: ${cores.branco};
   filter: brightness(80%);
 `
 
 export const NomeRestaurente = styled.h3`
   color: ${cores.branco};
   font-weight: bold;
+  font-size: 32px;
 `
 
 export const Card = styled.div`
-  width: 320px;
-  height: 338px;
-  overflow: hidden;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 360px;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   justify-content: space-between;
   margin: 16px;
@@ -101,7 +111,7 @@ export const CardsGrid = styled.div`
 
 export const CardImage = styled.img`
   width: 100%;
-  height: 185px;
+  height: 200px;
   object-fit: cover;
 `
 

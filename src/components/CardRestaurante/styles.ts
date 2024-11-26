@@ -12,7 +12,6 @@ export const Card = styled.div`
   background-color: ${cores.corFundo};
   width: 100%;
   max-width: 472px;
-  height: 400px;
   margin-bottom: 48px;
   border: 1px solid ${cores.laranjaEscuro};
   display: flex;

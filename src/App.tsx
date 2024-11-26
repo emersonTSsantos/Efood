@@ -9,7 +9,7 @@ import Perfil from './components/PerfilRestaurante'
 const Rotas = () => (
   <Routes>
     <Route path="/" element={<Home />} />
-    <Route path="/perfil" element={<Perfil />} />
+    <Route path="/Perfil/:id" element={<Perfil />} />
   </Routes>
 )
 

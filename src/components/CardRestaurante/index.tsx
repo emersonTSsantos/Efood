@@ -15,6 +15,7 @@ import {
 } from './styles'
 
 type Props = {
+  id: number
   titulo: string
   descricao: string
   nota: string
@@ -24,6 +25,7 @@ type Props = {
 }
 
 const Restaurantes = ({
+  id,
   descricao,
   nota,
   titulo,
@@ -54,7 +56,7 @@ const Restaurantes = ({
       </InfoContainer>
       <Descricao>{descricao}</Descricao>
       <Botao>
-        <StyledLink to="/Perfil">Saiba mais</StyledLink>
+        <StyledLink to={`/Perfil/${id}`}>Saiba mais</StyledLink>{' '}
       </Botao>
     </Card>
   </CardContainer>
