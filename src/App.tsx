@@ -5,6 +5,10 @@ import { GlobalCss } from './styles'
 import Home from './pages/Home'
 import Footer from './components/Footer'
 import Perfil from './components/PerfilRestaurante'
+import Carrinho from './components/Carrinho'
+
+import store from './store'
+import { Provider } from 'react-redux'
 
 const Rotas = () => (
   <Routes>
@@ -15,11 +19,14 @@ const Rotas = () => (
 
 function App() {
   return (
-    <BrowserRouter>
-      <GlobalCss />
-      <Rotas />
-      <Footer />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <GlobalCss />
+        <Rotas />
+        <Footer />
+        <Carrinho />
+      </BrowserRouter>
+    </Provider>
   )
 }
 

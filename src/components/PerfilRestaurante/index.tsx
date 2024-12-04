@@ -1,6 +1,9 @@
+// src/components/PerfilRestaurante/index.tsx
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { adicionarProduto } from '../../store' // Ajustado para usar a exportação correta do Redux
 
 import Fechar from '../../assets/images/fechar.png'
 import Efood from '../../assets/images/logo.png'
@@ -35,6 +38,8 @@ const Perfil = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pratoSelecionado, setPratoSelecionado] = useState<any>(null)
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
     const fetchRestaurante = async () => {
       try {
@@ -62,6 +67,18 @@ const Perfil = () => {
     return descricao
   }
 
+  const handleAddToCart = (prato: any) => {
+    dispatch(
+      adicionarProduto({
+        id: prato.id,
+        nome: prato.nome,
+        preco: prato.preco,
+        foto: prato.foto
+      })
+    )
+    setIsModalOpen(false) // Fecha o modal após adicionar
+  }
+
   if (!restaurante) {
     return <p>Carregando perfil...</p>
   }
@@ -84,7 +101,6 @@ const Perfil = () => {
         </CartInfo>
       </Header>
 
-      {/* Passando as informações dinâmicas para o Hero */}
       <Hero style={{ backgroundImage: `url(${restaurante.capa})` }}>
         <Container>
           <PerfilRestaurante>{restaurante.tipo}</PerfilRestaurante>
@@ -100,7 +116,6 @@ const Perfil = () => {
                 <CardImage src={item.foto} alt={item.nome} />
                 <CardContent>
                   <CardTitle>{item.nome}</CardTitle>
-                  {/* Usando a função para truncar a descrição */}
                   <CardDescription>
                     {truncateDescription(item.descricao, 140)}
                   </CardDescription>
@@ -115,7 +130,13 @@ const Perfil = () => {
       </section>
 
       {isModalOpen && pratoSelecionado && (
-        <ModalBackdrop>
+        <ModalBackdrop
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setIsModalOpen(false)
+            }
+          }}
+        >
           <ModalContent>
             <img
               src={Fechar}
@@ -127,7 +148,7 @@ const Perfil = () => {
               <h3>{pratoSelecionado.nome}</h3>
               <p>{pratoSelecionado.descricao}</p>
               <p>Serve: {pratoSelecionado.porcao}</p>
-              <AddButton>
+              <AddButton onClick={() => handleAddToCart(pratoSelecionado)}>
                 Adicionar ao carrinho - R$ {pratoSelecionado.preco.toFixed(2)}
               </AddButton>
             </div>

@@ -11,6 +11,7 @@ export const CardContainer = styled.div`
 export const Card = styled.div`
   background-color: ${cores.corFundo};
   width: 100%;
+  height: 90%;
   max-width: 472px;
   margin-bottom: 48px;
   border: 1px solid ${cores.laranjaEscuro};

@@ -37,9 +37,9 @@ export const Voltar = styled.img`
 
 export const ContainerVoltar = styled.div`
   display: flex;
-  align-items: center; /* Alinha a imagem e o texto verticalmente no centro */
-  justify-content: center; /* Centraliza a imagem e o texto horizontalmente */
-  gap: 8px; /* Espaçamento entre a imagem e o texto */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 `
 
 export const CartInfo = styled.p`
