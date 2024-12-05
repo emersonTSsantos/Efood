@@ -11,6 +11,16 @@ export const Header = styled.header`
   align-items: center;
   justify-content: space-between;
   padding: 0 200px;
+
+  @media (max-width: 1024px) {
+    padding: 0 50px;
+  }
+
+  @media (max-width: 750px) {
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+  }
 `
 
 export const NavContainer = styled.div`
@@ -28,6 +38,10 @@ export const NavContainer = styled.div`
 export const Logo = styled.img`
   height: 60px;
   margin: 0 auto;
+
+  @media (max-width: 750px) {
+    height: 50px;
+  }
 `
 export const Voltar = styled.img`
   height: 30px;
@@ -47,6 +61,11 @@ export const CartInfo = styled.p`
   color: ${cores.laranjaEscuro};
   font-weight: bold;
   cursor: pointer;
+
+  @media (max-width: 750px) {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
 `
 
 export const Container = styled.div`
@@ -59,9 +78,13 @@ export const Hero = styled.section`
   position: relative;
   background-size: cover;
   background-position: center;
-  height: 450px;
+  height: 400px;
   display: flex;
   align-items: center;
+
+  @media (max-width: 1024px) {
+    height: 350px;
+  }
 
   &::before {
     content: '';
@@ -82,16 +105,25 @@ export const Hero = styled.section`
 
 export const PerfilRestaurante = styled.h3`
   padding-top: 24px;
-  margin-bottom: 260px;
+  margin-bottom: 200px;
   font-size: 24px;
   color: ${cores.branco};
   filter: brightness(80%);
+
+  @media (max-width: 1024px) {
+    margin-bottom: 150px;
+    margin-left: 50px;
+  }
 `
 
 export const NomeRestaurente = styled.h3`
   color: ${cores.branco};
   font-weight: bold;
   font-size: 32px;
+
+  @media (max-width: 1024px) {
+    margin-left: 50px;
+  }
 `
 
 export const Card = styled.div`
@@ -102,12 +134,29 @@ export const Card = styled.div`
   justify-content: space-between;
   margin: 16px;
   border: solid 8px;
+
+  @media (max-width: 1024px) {
+    margin: 10px;
+  }
+
+  @media (max-width: 750px) {
+    margin: 20px;
+    width: 340px;
+  }
 `
 
 export const CardsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   margin-top: 56px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 750px) {
+    grid-template-columns: 1fr;
+  }
 `
 
 export const CardImage = styled.img`
@@ -171,6 +220,17 @@ export const ModalContent = styled.div`
   display: flex;
   padding: 24px;
 
+  @media (max-width: 1204px) {
+    width: 95%;
+    height: 330px;
+  }
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    align-items: center;
+    height: 550px;
+  }
+
   img:first-child {
     cursor: pointer;
     position: absolute;
@@ -183,6 +243,14 @@ export const ModalContent = styled.div`
     height: 280px;
     margin-right: 24px;
     object-fit: fill;
+
+    @media (max-width: 750px) {
+      width: 220px;
+      height: 200px;
+      margin: 0;
+      margin-top: 15px;
+      border-radius: 8px;
+    }
   }
 
   h3 {
@@ -190,6 +258,11 @@ export const ModalContent = styled.div`
     font-weight: bold;
     margin-bottom: 16px;
     color: ${cores.laranjaClaro};
+
+    @media (max-width: 750px) {
+      margin-top: 10px;
+      text-align: center;
+    }
   }
 
   p {
@@ -197,6 +270,22 @@ export const ModalContent = styled.div`
     font-size: 14px;
     line-height: 22px;
     color: ${cores.laranjaClaro};
+
+    @media (max-width: 750px) {
+      text-align: center;
+    }
+  }
+
+  div {
+    font-size: 14px;
+
+    @media (max-width: 750px) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
   }
 `
 

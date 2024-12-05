@@ -7,8 +7,8 @@ export const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8); /* Overlay com 80% de opacidade */
-  z-index: 99; /* Z-index para ficar atrás do carrinho */
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 99;
 `
 export const Vazio = styled.p`
   color: ${cores.laranjaClaro};
@@ -21,9 +21,13 @@ export const CarrinhoContainer = styled.div`
   right: 0;
   height: 100vh;
   width: 360px;
-  z-index: 100; /* Z-index maior que o overlay */
+  z-index: 100;
   display: flex;
   justify-content: flex-end;
+
+  @media (max-width: 750px) {
+    width: 300px;
+  }
 `
 
 export const BarraLateral = styled.aside`
@@ -53,12 +57,21 @@ export const ProdutoItem = styled.li`
   color: ${cores.laranjaEscuro};
   padding: 10px;
   margin-bottom: 10px;
+  border-radius: 6px;
+
+  @media (max-width: 750px) {
+    border-radius: 8px;
+  }
 `
 
 export const ProdutoImagem = styled.img`
   width: 90px;
   height: 90px;
   object-fit: cover;
+
+  @media (max-width: 750px) {
+    border-radius: 8px;
+  }
 `
 
 export const ProdutoInfo = styled.div`
