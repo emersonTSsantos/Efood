@@ -1,9 +1,8 @@
-// src/components/PerfilRestaurante/index.tsx
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
-import { useDispatch } from 'react-redux'
-import { adicionarProduto } from '../../store' // Ajustado para usar a exportação correta do Redux
+import { useDispatch, useSelector } from 'react-redux'
+import { adicionarProduto, toggleCarrinho } from '../../store'
 
 import Fechar from '../../assets/images/fechar.png'
 import Efood from '../../assets/images/logo.png'
@@ -37,6 +36,7 @@ const Perfil = () => {
   const [restaurante, setRestaurante] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pratoSelecionado, setPratoSelecionado] = useState<any>(null)
+  const { items } = useSelector((state: any) => state.carrinho)
 
   const dispatch = useDispatch()
 
@@ -76,7 +76,8 @@ const Perfil = () => {
         foto: prato.foto
       })
     )
-    setIsModalOpen(false) // Fecha o modal após adicionar
+    dispatch(toggleCarrinho()) // Exibe o carrinho
+    setIsModalOpen(false)
   }
 
   if (!restaurante) {
@@ -95,8 +96,8 @@ const Perfil = () => {
           </ContainerVoltar>
         </NavContainer>
         <Logo src={Efood} alt="Logo Efood" />
-        <CartInfo>
-          <span>0 </span>
+        <CartInfo onClick={() => dispatch(toggleCarrinho())}>
+          <span>{items.length} </span>
           produto(s) no carrinho
         </CartInfo>
       </Header>

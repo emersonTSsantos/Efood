@@ -46,6 +46,7 @@ export const CartInfo = styled.p`
   font-size: 18px;
   color: ${cores.laranjaEscuro};
   font-weight: bold;
+  cursor: pointer;
 `
 
 export const Container = styled.div`

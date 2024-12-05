@@ -1,7 +1,5 @@
-// store/index.ts
 import { createSlice, configureStore, PayloadAction } from '@reduxjs/toolkit'
 
-// Definir a interface para os itens do carrinho
 interface Produto {
   id: number
   nome: string
@@ -12,11 +10,13 @@ interface Produto {
 interface CarrinhoState {
   items: Produto[]
   total: number
+  isVisible: boolean // Controle de visibilidade do carrinho
 }
 
 const initialState: CarrinhoState = {
   items: [],
-  total: 0
+  total: 0,
+  isVisible: false
 }
 
 const carrinhoSlice = createSlice({
@@ -31,11 +31,17 @@ const carrinhoSlice = createSlice({
     // Remove um produto do carrinho
     removerProduto(state, action: PayloadAction<number>) {
       state.items = state.items.filter((item) => item.id !== action.payload)
-      // Atualizar o total após a remoção
       state.total = state.items.reduce((total, item) => total + item.preco, 0)
+    },
+    // Alterna a visibilidade do carrinho
+    toggleCarrinho(state) {
+      state.isVisible = !state.isVisible
     }
   }
 })
+
+export const { adicionarProduto, removerProduto, toggleCarrinho } =
+  carrinhoSlice.actions
 
 const store = configureStore({
   reducer: {
@@ -43,5 +49,4 @@ const store = configureStore({
   }
 })
 
-export const { adicionarProduto, removerProduto } = carrinhoSlice.actions
 export default store
