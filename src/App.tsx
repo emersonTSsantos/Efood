@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import Footer from './components/Footer'
 import Perfil from './components/PerfilRestaurante'
 import Carrinho from './components/Carrinho'
+import Checkout from './components/Checkout'
 
 import store from './store'
 import { Provider } from 'react-redux'
@@ -14,6 +15,7 @@ const Rotas = () => (
   <Routes>
     <Route path="/" element={<Home />} />
     <Route path="/Perfil/:id" element={<Perfil />} />
+    <Route path="/checkout" element={<Checkout />} />
   </Routes>
 )
 

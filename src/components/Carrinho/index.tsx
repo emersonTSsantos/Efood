@@ -1,8 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { removerProduto, toggleCarrinho } from '../../store'
+import {
+  removerProduto,
+  toggleCarrinho,
+  iniciarCheckout
+} from '../../store/reducers/carrinho'
 import pizza from '../../assets/images/pizza.png'
 import lixeira from '../../assets/images/lixeira.png'
-
 import {
   CarrinhoContainer,
   BarraLateral,
@@ -18,9 +21,10 @@ import {
   Overlay,
   Vazio
 } from './styles'
+import Checkout from '../Checkout'
 
 const Carrinho = () => {
-  const { items, total, isVisible } = useSelector(
+  const { items, total, isVisible, isCheckout } = useSelector(
     (state: any) => state.carrinho
   )
   const dispatch = useDispatch()
@@ -33,6 +37,12 @@ const Carrinho = () => {
     dispatch(toggleCarrinho())
   }
 
+  const handleCheckout = () => {
+    if (items.length > 0) {
+      dispatch(iniciarCheckout())
+    }
+  }
+
   if (!isVisible) return null
 
   return (
@@ -40,31 +50,39 @@ const Carrinho = () => {
       <Overlay onClick={handleCloseCart} />
       <CarrinhoContainer>
         <BarraLateral>
-          <ProdutoLista>
-            {items.length === 0 ? (
-              <Vazio>O carrinho está vazio!</Vazio>
-            ) : (
-              items.map((item: any) => (
-                <ProdutoItem key={item.id}>
-                  <ProdutoImagem src={item.foto || pizza} alt={item.nome} />
-                  <ProdutoInfo>
-                    <ProdutoNome>{item.nome}</ProdutoNome>
-                    <ProdutoPreco>R$ {item.preco.toFixed(2)}</ProdutoPreco>
-                  </ProdutoInfo>
-                  <IconeLixeira
-                    src={lixeira}
-                    alt="Remover item"
-                    onClick={() => handleRemoveProduct(item.id)}
-                  />
-                </ProdutoItem>
-              ))
-            )}
-          </ProdutoLista>
-          <Total>
-            <p>Valor Total</p>
-            <p>R$ {total.toFixed(2)}</p>
-          </Total>
-          <BotaoContinuar>Continuar com a entrega</BotaoContinuar>
+          {isCheckout ? (
+            <Checkout />
+          ) : (
+            <>
+              <ProdutoLista>
+                {items.length === 0 ? (
+                  <Vazio>O carrinho está vazio!</Vazio>
+                ) : (
+                  items.map((item: any) => (
+                    <ProdutoItem key={item.id}>
+                      <ProdutoImagem src={item.foto || pizza} alt={item.nome} />
+                      <ProdutoInfo>
+                        <ProdutoNome>{item.nome}</ProdutoNome>
+                        <ProdutoPreco>R$ {item.preco.toFixed(2)}</ProdutoPreco>
+                      </ProdutoInfo>
+                      <IconeLixeira
+                        src={lixeira}
+                        alt="Remover item"
+                        onClick={() => handleRemoveProduct(item.id)}
+                      />
+                    </ProdutoItem>
+                  ))
+                )}
+              </ProdutoLista>
+              <Total>
+                <p>Valor Total</p>
+                <p>R$ {total.toFixed(2)}</p>
+              </Total>
+              <BotaoContinuar onClick={handleCheckout}>
+                Continuar com a entrega
+              </BotaoContinuar>
+            </>
+          )}
         </BarraLateral>
       </CarrinhoContainer>
     </>

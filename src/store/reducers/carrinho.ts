@@ -8,35 +8,49 @@ interface Produto {
 }
 
 interface CarrinhoState {
-  produtos: Produto[]
+  items: Produto[]
   total: number
+  isVisible: boolean
+  isCheckout: boolean
 }
 
 const initialState: CarrinhoState = {
-  produtos: [],
-  total: 0
+  items: [],
+  total: 0,
+  isVisible: false,
+  isCheckout: false
 }
 
 const carrinhoSlice = createSlice({
   name: 'carrinho',
   initialState,
   reducers: {
-    adicionarProduto: (state, action: PayloadAction<Produto>) => {
-      state.produtos.push(action.payload)
+    adicionarProduto(state, action: PayloadAction<Produto>) {
+      state.items.push(action.payload)
       state.total += action.payload.preco
     },
-    removerProduto: (state, action: PayloadAction<number>) => {
-      const produtoIndex = state.produtos.findIndex(
-        (produto) => produto.id === action.payload
-      )
-      if (produtoIndex !== -1) {
-        const produto = state.produtos[produtoIndex]
-        state.produtos.splice(produtoIndex, 1)
-        state.total -= produto.preco
-      }
+    removerProduto(state, action: PayloadAction<number>) {
+      state.items = state.items.filter((item) => item.id !== action.payload)
+      state.total = state.items.reduce((total, item) => total + item.preco, 0)
+    },
+    toggleCarrinho(state) {
+      state.isVisible = !state.isVisible
+    },
+    iniciarCheckout(state) {
+      state.isCheckout = true
+    },
+    voltarParaCarrinho(state) {
+      state.isCheckout = false
     }
   }
 })
 
-export const { adicionarProduto, removerProduto } = carrinhoSlice.actions
+export const {
+  adicionarProduto,
+  removerProduto,
+  toggleCarrinho,
+  iniciarCheckout,
+  voltarParaCarrinho
+} = carrinhoSlice.actions
+
 export default carrinhoSlice.reducer

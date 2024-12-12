@@ -6,7 +6,7 @@ import { adicionarProduto, toggleCarrinho } from '../../store'
 
 import Fechar from '../../assets/images/fechar.png'
 import Efood from '../../assets/images/logo.png'
-import IrParaHome from '../../assets/images/2268485.png'
+import IrParaHome from '../../assets/images/de-volta.png'
 
 import {
   Header,
@@ -76,7 +76,7 @@ const Perfil = () => {
         foto: prato.foto
       })
     )
-    dispatch(toggleCarrinho()) // Exibe o carrinho
+    dispatch(toggleCarrinho())
     setIsModalOpen(false)
   }
 

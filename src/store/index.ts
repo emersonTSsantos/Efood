@@ -10,7 +10,7 @@ interface Produto {
 interface CarrinhoState {
   items: Produto[]
   total: number
-  isVisible: boolean // Controle de visibilidade do carrinho
+  isVisible: boolean
 }
 
 const initialState: CarrinhoState = {
@@ -23,17 +23,14 @@ const carrinhoSlice = createSlice({
   name: 'carrinho',
   initialState,
   reducers: {
-    // Adiciona um produto ao carrinho
     adicionarProduto(state, action: PayloadAction<Produto>) {
       state.items.push(action.payload)
       state.total += action.payload.preco
     },
-    // Remove um produto do carrinho
     removerProduto(state, action: PayloadAction<number>) {
       state.items = state.items.filter((item) => item.id !== action.payload)
       state.total = state.items.reduce((total, item) => total + item.preco, 0)
     },
-    // Alterna a visibilidade do carrinho
     toggleCarrinho(state) {
       state.isVisible = !state.isVisible
     }
