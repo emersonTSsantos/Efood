@@ -1,6 +1,6 @@
 import { createSlice, configureStore, PayloadAction } from '@reduxjs/toolkit'
 
-interface Produto {
+export interface Produto {
   id: number
   nome: string
   preco: number
@@ -11,12 +11,18 @@ interface CarrinhoState {
   items: Produto[]
   total: number
   isVisible: boolean
+  isCheckout: boolean
 }
 
 const initialState: CarrinhoState = {
   items: [],
   total: 0,
-  isVisible: false
+  isVisible: false,
+  isCheckout: false
+}
+
+export interface RootState {
+  carrinho: CarrinhoState
 }
 
 const carrinhoSlice = createSlice({
