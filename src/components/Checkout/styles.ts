@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { cores } from '../../styles'
+import { Link } from 'react-router-dom'
 
 export const Overlay = styled.div`
   position: fixed;
@@ -42,7 +43,9 @@ export const CheckoutContainer = styled.div`
   }
 `
 
-export const BotaoVoltar = styled.button`
+export const BotaoVoltar = styled(Link)`
+  display: block;
+  text-align: center;
   width: 100%;
   background-color: ${cores.laranjaClaro};
   color: ${cores.laranjaEscuro};
@@ -80,9 +83,9 @@ export const Container = styled.div`
   }
 `
 
-export const CampoErro = styled.span`
-  color: ${cores.corFundo};
-  font-size: 12px;
+export const ContainerCartao = styled.div`
+  display: flex;
+  column-gap: 24px;
 `
 
 export const BotaoSubmit = styled.button`
@@ -95,4 +98,15 @@ export const BotaoSubmit = styled.button`
   border: none;
   cursor: pointer;
   margin-top: 16px;
+`
+export const Titulo = styled.h2`
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 16px;
+`
+
+export const Paragrafo = styled.p`
+  font-size: 14px;
+  line-height: 22px;
+  margin-bottom: 14px;
 `
