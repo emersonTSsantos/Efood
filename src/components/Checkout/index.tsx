@@ -34,33 +34,33 @@ const Checkout = () => {
       anoExpiracao: ''
     },
     validationSchema: Yup.object({
-      //Dados Cliente
+      // Dados Cliente
       nome: Yup.string()
         .min(5, 'O nome precisa ter pelo menos 5 caracteres')
         .required('O campo é obrigatório'),
       endereco: Yup.string().required('O campo é obrigatório'),
       cidade: Yup.string().required('O campo é obrigatório'),
       cep: Yup.string()
-        .length(9, 'Cep inválido')
+        .length(9, 'CEP inválido')
         .required('O campo é obrigatório'),
       numero: Yup.string().required('O campo é obrigatório'),
       complemento: Yup.string(),
 
-      //Pagamento com cartão
-      DonoCartao: Yup.string().when((values, schema) =>
-        step ? schema.required('O campo é obrigatório') : schema
+      // Pagamento com cartão
+      DonoCartao: Yup.string().when((_, schema) =>
+        step === 2 ? schema.required('O campo é obrigatório') : schema
       ),
-      numeroCartao: Yup.string().when((values, schema) =>
-        step ? schema.required('O campo é obrigatório') : schema
+      numeroCartao: Yup.string().when((_, schema) =>
+        step === 2 ? schema.required('O campo é obrigatório') : schema
       ),
-      codigoCartao: Yup.string().when((values, schema) =>
-        step ? schema.required('O campo é obrigatório') : schema
+      codigoCartao: Yup.string().when((_, schema) =>
+        step === 2 ? schema.required('O campo é obrigatório') : schema
       ),
-      mesExpiracao: Yup.string().when((values, schema) =>
-        step ? schema.required('O campo é obrigatório') : schema
+      mesExpiracao: Yup.string().when((_, schema) =>
+        step === 2 ? schema.required('O campo é obrigatório') : schema
       ),
-      anoExpiracao: Yup.string().when((values, schema) =>
-        step ? schema.required('O campo é obrigatório') : schema
+      anoExpiracao: Yup.string().when((_, schema) =>
+        step === 2 ? schema.required('O campo é obrigatório') : schema
       )
     }),
     onSubmit: (values) => {
@@ -94,7 +94,7 @@ const Checkout = () => {
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
                 />
-                <small>{getMensagemDeErro('nome', form.errors.nome)}</small>
+                <small>{getMensagemDeErro('nome')}</small>
               </Campo>
 
               <Campo>
@@ -107,9 +107,7 @@ const Checkout = () => {
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
                 />
-                <small>
-                  {getMensagemDeErro('endereco', form.errors.endereco)}
-                </small>
+                <small>{getMensagemDeErro('endereco')}</small>
               </Campo>
 
               <Campo>
@@ -122,7 +120,7 @@ const Checkout = () => {
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
                 />
-                <small>{getMensagemDeErro('cidade', form.errors.cidade)}</small>
+                <small>{getMensagemDeErro('cidade')}</small>
               </Campo>
 
               <Container>
@@ -136,7 +134,7 @@ const Checkout = () => {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                   />
-                  <small>{getMensagemDeErro('cep', form.errors.cep)}</small>
+                  <small>{getMensagemDeErro('cep')}</small>
                 </Campo>
 
                 <Campo>
@@ -149,9 +147,7 @@ const Checkout = () => {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                   />
-                  <small>
-                    {getMensagemDeErro('numero', form.errors.numero)}
-                  </small>
+                  <small>{getMensagemDeErro('numero')}</small>
                 </Campo>
               </Container>
 
@@ -165,12 +161,12 @@ const Checkout = () => {
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
                 />
-                <small>
-                  {getMensagemDeErro('complemento', form.errors.complemento)}
-                </small>
+                <small>{getMensagemDeErro('complemento')}</small>
               </Campo>
 
-              <BotaoSubmit type="submit">Continuar</BotaoSubmit>
+              <BotaoSubmit type="button" onClick={() => setStep(2)}>
+                Continuar
+              </BotaoSubmit>
             </>
           )}
 
@@ -179,6 +175,7 @@ const Checkout = () => {
               <Titulo>
                 Pagamento - Valor a pagar R$<span>190,90</span>
               </Titulo>
+
               <Campo>
                 <label htmlFor="DonoCartao">Nome no Cartão</label>
                 <input
@@ -189,9 +186,7 @@ const Checkout = () => {
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
                 />
-                <small>
-                  {getMensagemDeErro('DonoCartao', form.errors.nome)}
-                </small>
+                <small>{getMensagemDeErro('DonoCartao')}</small>
               </Campo>
 
               <ContainerCartao>
@@ -205,12 +200,7 @@ const Checkout = () => {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                   />
-                  <small>
-                    {getMensagemDeErro(
-                      'numeroCartao',
-                      form.errors.numeroCartao
-                    )}
-                  </small>
+                  <small>{getMensagemDeErro('numeroCartao')}</small>
                 </Campo>
 
                 <Campo>
@@ -223,12 +213,7 @@ const Checkout = () => {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                   />
-                  <small>
-                    {getMensagemDeErro(
-                      'codigoCartao',
-                      form.errors.codigoCartao
-                    )}
-                  </small>
+                  <small>{getMensagemDeErro('codigoCartao')}</small>
                 </Campo>
               </ContainerCartao>
 
@@ -243,12 +228,7 @@ const Checkout = () => {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                   />
-                  <small>
-                    {getMensagemDeErro(
-                      'mesExpiracao',
-                      form.errors.mesExpiracao
-                    )}
-                  </small>
+                  <small>{getMensagemDeErro('mesExpiracao')}</small>
                 </Campo>
 
                 <Campo>
@@ -261,18 +241,14 @@ const Checkout = () => {
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
                   />
-                  <small>
-                    {getMensagemDeErro(
-                      'anoExpiracao',
-                      form.errors.anoExpiracao
-                    )}
-                  </small>
+                  <small>{getMensagemDeErro('anoExpiracao')}</small>
                 </Campo>
               </ContainerCartao>
-              <BotaoSubmit onClick={() => setStep(step + 1)}>
+
+              <BotaoSubmit type="button" onClick={() => setStep(3)}>
                 Finalizar pagamento
               </BotaoSubmit>
-              <BotaoSubmit onClick={() => setStep(step - 1)}>
+              <BotaoSubmit type="button" onClick={() => setStep(1)}>
                 Voltar para a edição de endereço
               </BotaoSubmit>
             </>
@@ -280,25 +256,23 @@ const Checkout = () => {
 
           {step === 3 && (
             <>
-              <Titulo>Pedido realizado - {}</Titulo>
+              <Titulo>Pedido realizado!</Titulo>
               <Paragrafo>
                 Estamos felizes em informar que seu pedido já está em processo
                 de preparação e, em breve, será entregue no endereço fornecido.
               </Paragrafo>
               <Paragrafo>
-                Gostaríamos de ressaltar que nossos entregadores não estão
-                autorizados a realizar cobranças extras.
+                Nossos entregadores não estão autorizados a realizar cobranças
+                extras.
               </Paragrafo>
               <Paragrafo>
-                Lembre-se da importância de higienizar as mãos após o
-                recebimento do pedido, garantindo assim sua segurança e
-                bem-estar durante a refeição.
+                Lembre-se de higienizar as mãos após o recebimento do pedido.
               </Paragrafo>
               <Paragrafo>
-                Esperamos que desfrute de uma deliciosa e agradável experiência
-                gastronômica. Bom apetite!
+                Esperamos que desfrute de uma deliciosa experiência
+                gastronômica.
               </Paragrafo>
-              <BotaoVoltar to={'/'}>Concluir</BotaoVoltar>
+              <BotaoVoltar to="/">Concluir</BotaoVoltar>
             </>
           )}
         </CheckoutContainer>

@@ -35,22 +35,11 @@ const carrinhoSlice = createSlice({
     },
     toggleCarrinho(state) {
       state.isVisible = !state.isVisible
-    },
-    iniciarCheckout(state) {
-      state.isCheckout = true
-    },
-    voltarParaCarrinho(state) {
-      state.isCheckout = false
     }
   }
 })
 
-export const {
-  adicionarProduto,
-  removerProduto,
-  toggleCarrinho,
-  iniciarCheckout,
-  voltarParaCarrinho
-} = carrinhoSlice.actions
+export const { adicionarProduto, removerProduto, toggleCarrinho } =
+  carrinhoSlice.actions
 
 export default carrinhoSlice.reducer

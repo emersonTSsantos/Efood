@@ -86,6 +86,14 @@ export const Container = styled.div`
 export const ContainerCartao = styled.div`
   display: flex;
   column-gap: 24px;
+<<<<<<< HEAD
+=======
+`
+
+export const CampoErro = styled.span`
+  color: ${cores.corFundo};
+  font-size: 12px;
+>>>>>>> 150b6683bdf4c25d047c39a9e9cfc6eab36ea11f
 `
 
 export const BotaoSubmit = styled.button`
