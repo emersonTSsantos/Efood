@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface Produto {
+export interface Produto {
   id: number
   nome: string
   preco: number
@@ -35,11 +35,29 @@ const carrinhoSlice = createSlice({
     },
     toggleCarrinho(state) {
       state.isVisible = !state.isVisible
+    },
+    iniciarCheckout(state) {
+      state.isVisible = false
+      state.isCheckout = true
+    },
+    voltarParaCarrinho(state) {
+      state.isCheckout = false
+      state.isVisible = true
+    },
+    fecharCheckout(state) {
+      state.isVisible = false
+      state.isCheckout = false
     }
   }
 })
 
-export const { adicionarProduto, removerProduto, toggleCarrinho } =
-  carrinhoSlice.actions
+export const {
+  adicionarProduto,
+  removerProduto,
+  toggleCarrinho,
+  iniciarCheckout,
+  voltarParaCarrinho,
+  fecharCheckout
+} = carrinhoSlice.actions
 
 export default carrinhoSlice.reducer

@@ -1,6 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { removerProduto, toggleCarrinho } from '../../store/reducers/carrinho'
-import pizza from '../../assets/images/pizza.png'
+
+import {
+  iniciarCheckout,
+  removerProduto,
+  toggleCarrinho
+} from '../../store/reducers/carrinho'
+
+import { Produto } from '../../store/reducers/carrinho'
+import Checkout from '../Checkout'
+import { RootState } from '../../store'
+
 import lixeira from '../../assets/images/lixeira.png'
 
 import {
@@ -18,10 +27,9 @@ import {
   Overlay,
   Vazio
 } from './styles'
-import { Produto, RootState } from '../../store'
 
 const Carrinho = () => {
-  const { items, total, isVisible } = useSelector(
+  const { items, total, isVisible, isCheckout } = useSelector(
     (state: RootState) => state.carrinho
   )
   const dispatch = useDispatch()
@@ -32,6 +40,10 @@ const Carrinho = () => {
 
   const handleCloseCart = () => {
     dispatch(toggleCarrinho())
+  }
+
+  if (isCheckout) {
+    return <Checkout />
   }
 
   if (!isVisible) return null
@@ -49,7 +61,7 @@ const Carrinho = () => {
               ) : (
                 items.map((item: Produto) => (
                   <ProdutoItem key={item.id}>
-                    <ProdutoImagem src={item.foto || pizza} alt={item.nome} />
+                    <ProdutoImagem src={item.foto} alt={item.nome} />
                     <ProdutoInfo>
                       <ProdutoNome>{item.nome}</ProdutoNome>
                       <ProdutoPreco>R$ {item.preco.toFixed(2)}</ProdutoPreco>
@@ -67,7 +79,9 @@ const Carrinho = () => {
               <p>Valor Total</p>
               <p>R$ {total.toFixed(2)}</p>
             </Total>
-            <BotaoContinuar>Continuar com a entrega</BotaoContinuar>
+            <BotaoContinuar onClick={() => dispatch(iniciarCheckout())}>
+              Continuar com a entrega
+            </BotaoContinuar>
           </>
           )
         </BarraLateral>

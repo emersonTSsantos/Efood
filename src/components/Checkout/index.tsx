@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
+import { usePurchaseMutation } from '../services/api'
+
 import {
   BotaoVoltar,
   Campo,
@@ -12,12 +14,20 @@ import {
   Titulo,
   Paragrafo,
   CheckoutContainer,
-  BarraLateral
+  BarraLateral,
+  Overlay
 } from './styles'
+import {
+  voltarParaCarrinho,
+  fecharCheckout
+} from '../../store/reducers/carrinho'
 
 const Checkout = () => {
   const dispatch = useDispatch()
   const [step, setStep] = useState(1)
+
+  const [purchase, { data, isSuccess, isLoading, error }] =
+    usePurchaseMutation()
 
   const form = useFormik({
     initialValues: {
@@ -64,7 +74,35 @@ const Checkout = () => {
       )
     }),
     onSubmit: (values) => {
-      console.log(values)
+      purchase({
+        delivery: {
+          receiver: values.nome,
+          address: {
+            description: values.endereco,
+            city: values.cidade,
+            zipCode: values.cep,
+            number: Number(values.numero),
+            complement: values.complemento
+          }
+        },
+        payment: {
+          card: {
+            name: values.DonoCartao,
+            number: values.numeroCartao,
+            code: Number(values.codigoCartao),
+            expires: {
+              month: Number(values.mesExpiracao),
+              year: Number(values.anoExpiracao)
+            }
+          }
+        },
+        products: [
+          {
+            id: 1,
+            price: 10
+          }
+        ]
+      })
     }
   })
 
@@ -78,6 +116,7 @@ const Checkout = () => {
 
   return (
     <form onSubmit={form.handleSubmit}>
+      <Overlay />
       <BarraLateral>
         <CheckoutContainer>
           {step === 1 && (
@@ -166,6 +205,13 @@ const Checkout = () => {
 
               <BotaoSubmit type="button" onClick={() => setStep(2)}>
                 Continuar
+              </BotaoSubmit>
+
+              <BotaoSubmit
+                type="button"
+                onClick={() => dispatch(voltarParaCarrinho())}
+              >
+                Voltar para o carrinho
               </BotaoSubmit>
             </>
           )}
@@ -256,7 +302,7 @@ const Checkout = () => {
 
           {step === 3 && (
             <>
-              <Titulo>Pedido realizado!</Titulo>
+              <Titulo>Pedido realizado! - {}</Titulo>
               <Paragrafo>
                 Estamos felizes em informar que seu pedido já está em processo
                 de preparação e, em breve, será entregue no endereço fornecido.
@@ -272,7 +318,9 @@ const Checkout = () => {
                 Esperamos que desfrute de uma deliciosa experiência
                 gastronômica.
               </Paragrafo>
-              <BotaoVoltar to="/">Concluir</BotaoVoltar>
+              <BotaoVoltar to="/" onClick={() => dispatch(fecharCheckout())}>
+                Concluir
+              </BotaoVoltar>
             </>
           )}
         </CheckoutContainer>

@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { adicionarProduto, toggleCarrinho } from '../../store'
+import { adicionarProduto, toggleCarrinho } from '../../store/reducers/carrinho'
 
 import Fechar from '../../assets/images/fechar.png'
 import Efood from '../../assets/images/logo.png'
 import IrParaHome from '../../assets/images/de-volta.png'
+import bolinhaCarrinho from '../../assets/images/Red-Ball-Transparent.png'
 
 import {
   Header,
@@ -99,6 +100,7 @@ const Perfil = () => {
         <CartInfo onClick={() => dispatch(toggleCarrinho())}>
           <span>{items.length} </span>
           produto(s) no carrinho
+          {items.length > 0 && <img src={bolinhaCarrinho} alt="notificação" />}
         </CartInfo>
       </Header>
 

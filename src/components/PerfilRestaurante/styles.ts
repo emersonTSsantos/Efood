@@ -57,10 +57,23 @@ export const ContainerVoltar = styled.div`
 `
 
 export const CartInfo = styled.p`
+  display: flex;
+  align-items: center;
   font-size: 18px;
   color: ${cores.laranjaEscuro};
   font-weight: bold;
   cursor: pointer;
+
+  img {
+    height: 20px;
+    width: 20px;
+    margin-left: 2px;
+    display: inline-block;
+  }
+
+  span {
+    margin-right: 4px;
+  }
 
   @media (max-width: 750px) {
     font-size: 24px;

@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Provider, useSelector } from 'react-redux'
 
 import { GlobalCss } from './styles'
 
@@ -8,28 +9,34 @@ import Perfil from './components/PerfilRestaurante'
 import Carrinho from './components/Carrinho'
 import Checkout from './components/Checkout'
 
-import store from './store'
-import { Provider } from 'react-redux'
+import store, { RootState } from './store'
 
 const Rotas = () => (
   <Routes>
     <Route path="/" element={<Home />} />
     <Route path="/Perfil/:id" element={<Perfil />} />
-    <Route path="/checkout" element={<Checkout />} />
   </Routes>
 )
 
 function App() {
+  const { isCheckout } = useSelector((state: RootState) => state.carrinho)
+
   return (
-    <Provider store={store}>
+    <>
       <BrowserRouter>
         <GlobalCss />
         <Rotas />
         <Footer />
-        <Carrinho />
+        {isCheckout ? <Checkout /> : <Carrinho />}
       </BrowserRouter>
-    </Provider>
+    </>
   )
 }
 
-export default App
+const Root = () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
+
+export default Root
