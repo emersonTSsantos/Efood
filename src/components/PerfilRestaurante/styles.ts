@@ -318,3 +318,26 @@ export const AddButton = styled.button`
     color: ${cores.laranjaEscuro};
   }
 `
+
+export const Carregando = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  transform: scale(3);
+
+  .c-loader {
+    animation: is-rotating 1s infinite;
+    width: 50px;
+    height: 50px;
+    border: 6px solid ${cores.laranjaClaro};
+    border-radius: 50%;
+    border-top: ${cores.laranjaEscuro};
+
+    @keyframes is-rotating {
+      to {
+        transform: rotate(1turn);
+      }
+    }
+  }
+`

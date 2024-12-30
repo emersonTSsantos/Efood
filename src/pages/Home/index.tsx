@@ -5,6 +5,7 @@ import Header from '../../components/Header'
 import Restaurante from '../../models/Restaurante'
 
 import estrela from '../../assets/images/estrela.png'
+import { Carregando } from '../../components/PerfilRestaurante/styles'
 
 const Home = () => {
   const [restaurantes, setRestaurantes] = useState<Restaurante[]>([])
@@ -41,7 +42,9 @@ const Home = () => {
       {restaurantes.length > 0 ? (
         <ListaDeRestaurantes restaurante={restaurantes} />
       ) : (
-        <p>Carregando restaurantes...</p>
+        <Carregando>
+          <div className="c-loader"></div>
+        </Carregando>
       )}
     </>
   )

@@ -7,14 +7,14 @@ export interface Produto {
   foto: string
 }
 
-interface CarrinhoState {
+export interface CarrinhoState {
   items: Produto[]
   total: number
   isVisible: boolean
   isCheckout: boolean
 }
 
-const initialState: CarrinhoState = {
+export const initialState: CarrinhoState = {
   items: [],
   total: 0,
   isVisible: false,
@@ -36,6 +36,7 @@ const carrinhoSlice = createSlice({
     toggleCarrinho(state) {
       state.isVisible = !state.isVisible
     },
+
     iniciarCheckout(state) {
       state.isVisible = false
       state.isCheckout = true
@@ -47,6 +48,10 @@ const carrinhoSlice = createSlice({
     fecharCheckout(state) {
       state.isVisible = false
       state.isCheckout = false
+    },
+    limparCarrinho: (state) => {
+      state.items = []
+      state.total = 0
     }
   }
 })
@@ -57,7 +62,8 @@ export const {
   toggleCarrinho,
   iniciarCheckout,
   voltarParaCarrinho,
-  fecharCheckout
+  fecharCheckout,
+  limparCarrinho
 } = carrinhoSlice.actions
 
 export default carrinhoSlice.reducer

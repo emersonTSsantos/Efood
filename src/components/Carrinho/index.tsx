@@ -53,11 +53,13 @@ const Carrinho = () => {
       <Overlay onClick={handleCloseCart} />
       <CarrinhoContainer>
         <BarraLateral>
-          (
           <>
             <ProdutoLista>
               {items.length === 0 ? (
-                <Vazio>O carrinho está vazio!</Vazio>
+                <Vazio>
+                  O carrinho está vazio! <br /> <br />
+                  Adicione um prato ao Seu carrinho!!!
+                </Vazio>
               ) : (
                 items.map((item: Produto) => (
                   <ProdutoItem key={item.id}>
@@ -75,15 +77,20 @@ const Carrinho = () => {
                 ))
               )}
             </ProdutoLista>
-            <Total>
-              <p>Valor Total</p>
-              <p>R$ {total.toFixed(2)}</p>
-            </Total>
-            <BotaoContinuar onClick={() => dispatch(iniciarCheckout())}>
-              Continuar com a entrega
-            </BotaoContinuar>
+
+            {items.length > 0 && (
+              <Total>
+                <p>Valor Total</p>
+                <p>R$ {total.toFixed(2)}</p>
+              </Total>
+            )}
+
+            {items.length > 0 && (
+              <BotaoContinuar onClick={() => dispatch(iniciarCheckout())}>
+                Continuar com a entrega
+              </BotaoContinuar>
+            )}
           </>
-          )
         </BarraLateral>
       </CarrinhoContainer>
     </>

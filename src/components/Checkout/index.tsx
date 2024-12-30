@@ -1,9 +1,15 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
+import InputMask from 'react-input-mask'
 import * as Yup from 'yup'
 
-import { usePurchaseMutation } from '../services/api'
+import { RootState } from '../../store'
+import {
+  voltarParaCarrinho,
+  fecharCheckout,
+  limparCarrinho
+} from '../../store/reducers/carrinho'
 
 import {
   BotaoVoltar,
@@ -17,17 +23,35 @@ import {
   BarraLateral,
   Overlay
 } from './styles'
-import {
-  voltarParaCarrinho,
-  fecharCheckout
-} from '../../store/reducers/carrinho'
+import axios from 'axios'
+
+interface CheckoutResponse {
+  isSuccess: boolean
+  orderId?: string
+}
 
 const Checkout = () => {
-  const dispatch = useDispatch()
-  const [step, setStep] = useState(1)
+  const { total } = useSelector((state: RootState) => state.carrinho)
 
-  const [purchase, { data, isSuccess, isLoading, error }] =
-    usePurchaseMutation()
+  const dispatch = useDispatch()
+  const handleConcluir = () => {
+    // Limpar o carrinho
+    dispatch(limparCarrinho())
+
+    // Fechar o checkout e voltar para a página inicial
+    dispatch(fecharCheckout())
+  }
+
+  const [step, setStep] = useState(1)
+  const [isLoadingCheckout, setIsLoadingCheckout] = useState(false)
+  const [checkoutResponse, setCheckoutResponse] =
+    useState<CheckoutResponse | null>(null)
+
+  useEffect(() => {
+    if (checkoutResponse) {
+      console.log('Checkout Response:', checkoutResponse)
+    }
+  }, [checkoutResponse])
 
   const form = useFormik({
     initialValues: {
@@ -51,67 +75,127 @@ const Checkout = () => {
       endereco: Yup.string().required('O campo é obrigatório'),
       cidade: Yup.string().required('O campo é obrigatório'),
       cep: Yup.string()
-        .length(9, 'CEP inválido')
+        .matches(/^\d{5}-\d{3}$/, 'CEP inválido')
         .required('O campo é obrigatório'),
-      numero: Yup.string().required('O campo é obrigatório'),
-      complemento: Yup.string(),
+      numero: Yup.number().required('O campo é obrigatório'),
 
       // Pagamento com cartão
-      DonoCartao: Yup.string().when((_, schema) =>
-        step === 2 ? schema.required('O campo é obrigatório') : schema
-      ),
-      numeroCartao: Yup.string().when((_, schema) =>
-        step === 2 ? schema.required('O campo é obrigatório') : schema
-      ),
-      codigoCartao: Yup.string().when((_, schema) =>
-        step === 2 ? schema.required('O campo é obrigatório') : schema
-      ),
-      mesExpiracao: Yup.string().when((_, schema) =>
-        step === 2 ? schema.required('O campo é obrigatório') : schema
-      ),
-      anoExpiracao: Yup.string().when((_, schema) =>
-        step === 2 ? schema.required('O campo é obrigatório') : schema
-      )
+      DonoCartao: Yup.string().required('O campo é obrigatório'),
+      numeroCartao: Yup.string()
+        .matches(/^\d{4} \d{4} \d{4} \d{4}$/, 'Número do cartão inválido')
+        .required('O campo é obrigatório'),
+      codigoCartao: Yup.string()
+        .length(3, 'CVV deve ter 3 dígitos')
+        .required('O campo é obrigatório'),
+      mesExpiracao: Yup.string()
+        .matches(/^(0[1-9]|1[0-2])$/, 'Mês inválido')
+        .required('O campo é obrigatório'),
+      anoExpiracao: Yup.string()
+        .matches(/^\d{4}$/, 'Ano inválido')
+        .required('O campo é obrigatório')
+        .test(
+          'ano-valido',
+          'Ano de vencimento deve ser maior ou igual ao ano atual',
+          (value) => {
+            const currentYear = new Date().getFullYear()
+            return parseInt(value || '0') >= currentYear
+          }
+        )
     }),
     onSubmit: (values) => {
-      purchase({
-        delivery: {
-          receiver: values.nome,
-          address: {
-            description: values.endereco,
-            city: values.cidade,
-            zipCode: values.cep,
-            number: Number(values.numero),
-            complement: values.complemento
-          }
-        },
-        payment: {
-          card: {
-            name: values.DonoCartao,
-            number: values.numeroCartao,
-            code: Number(values.codigoCartao),
-            expires: {
-              month: Number(values.mesExpiracao),
-              year: Number(values.anoExpiracao)
-            }
-          }
-        },
-        products: [
-          {
-            id: 1,
-            price: 10
-          }
-        ]
-      })
+      handleCheckout(values)
     }
   })
 
-  const getMensagemDeErro = (fieldName: string, message?: string) => {
-    const estaAlterado = fieldName in form.touched
-    const estaInvalido = fieldName in form.errors
+  const handleCheckout = async (values: typeof form.values) => {
+    setIsLoadingCheckout(true)
 
-    if (estaAlterado && estaInvalido) return message
+    try {
+      const response = await axios.post(
+        'https://fake-api-tau.vercel.app/api/efood/checkout',
+        {
+          delivery: {
+            receiver: values.nome,
+            address: {
+              description: values.endereco,
+              city: values.cidade,
+              zipCode: values.cep,
+              number: Number(values.numero),
+              complement: values.complemento
+            }
+          },
+          payment: {
+            card: {
+              name: values.DonoCartao,
+              number: values.numeroCartao,
+              code: Number(values.codigoCartao),
+              expires: {
+                month: Number(values.mesExpiracao),
+                year: Number(values.anoExpiracao)
+              }
+            }
+          },
+          products: [
+            {
+              id: 1,
+              price: 10
+            }
+          ]
+        }
+      )
+
+      console.log(checkoutResponse)
+      console.log(response.data)
+
+      setCheckoutResponse(response.data)
+      setStep(3)
+    } catch (error) {
+      console.error('Erro ao realizar o pedido:', error)
+    } finally {
+      setIsLoadingCheckout(false)
+    }
+  }
+
+  const getMensagemDeErro = (fieldName: keyof typeof form.values) => {
+    const estaAlterado = form.touched[fieldName]
+    const estaInvalido = form.errors[fieldName]
+
+    if (estaAlterado && estaInvalido) return estaInvalido
     return ''
+  }
+
+  const isStepValid = () => {
+    if (step === 1) {
+      return (
+        form.values.nome &&
+        form.values.endereco &&
+        form.values.cidade &&
+        form.values.cep &&
+        form.values.numero &&
+        !Object.keys(form.errors).some((field) =>
+          ['nome', 'endereco', 'cidade', 'cep', 'numero'].includes(field)
+        )
+      )
+    }
+    if (step === 2) {
+      return (
+        form.values.DonoCartao &&
+        form.values.numeroCartao &&
+        form.values.codigoCartao &&
+        form.values.mesExpiracao &&
+        form.values.anoExpiracao &&
+        !Object.keys(form.errors).some((field) =>
+          [
+            'DonoCartao',
+            'numeroCartao',
+            'codigoCartao',
+            'mesExpiracao',
+            'anoExpiracao'
+          ].includes(field)
+        )
+      )
+    }
+    return false
   }
 
   return (
@@ -132,6 +216,7 @@ const Checkout = () => {
                   value={form.values.nome}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  disabled={isLoadingCheckout}
                 />
                 <small>{getMensagemDeErro('nome')}</small>
               </Campo>
@@ -145,6 +230,7 @@ const Checkout = () => {
                   value={form.values.endereco}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  disabled={isLoadingCheckout}
                 />
                 <small>{getMensagemDeErro('endereco')}</small>
               </Campo>
@@ -158,6 +244,7 @@ const Checkout = () => {
                   value={form.values.cidade}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  disabled={isLoadingCheckout}
                 />
                 <small>{getMensagemDeErro('cidade')}</small>
               </Campo>
@@ -165,13 +252,14 @@ const Checkout = () => {
               <Container>
                 <Campo>
                   <label htmlFor="cep">CEP</label>
-                  <input
-                    type="text"
+                  <InputMask
+                    mask="99999-999"
                     id="cep"
                     name="cep"
                     value={form.values.cep}
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
+                    disabled={isLoadingCheckout}
                   />
                   <small>{getMensagemDeErro('cep')}</small>
                 </Campo>
@@ -185,6 +273,7 @@ const Checkout = () => {
                     value={form.values.numero}
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
+                    disabled={isLoadingCheckout}
                   />
                   <small>{getMensagemDeErro('numero')}</small>
                 </Campo>
@@ -199,11 +288,21 @@ const Checkout = () => {
                   value={form.values.complemento}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  disabled={isLoadingCheckout}
                 />
                 <small>{getMensagemDeErro('complemento')}</small>
               </Campo>
 
-              <BotaoSubmit type="button" onClick={() => setStep(2)}>
+              <BotaoSubmit
+                type="button"
+                onClick={() => {
+                  form.submitForm()
+                  if (isStepValid()) {
+                    setStep(2)
+                  }
+                }}
+                disabled={isLoadingCheckout}
+              >
                 Continuar
               </BotaoSubmit>
 
@@ -219,7 +318,7 @@ const Checkout = () => {
           {step === 2 && (
             <>
               <Titulo>
-                Pagamento - Valor a pagar R$<span>190,90</span>
+                Pagamento - Valor a pagar R$<span>{total.toFixed(2)}</span>
               </Titulo>
 
               <Campo>
@@ -231,6 +330,7 @@ const Checkout = () => {
                   value={form.values.DonoCartao}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  disabled={isLoadingCheckout}
                 />
                 <small>{getMensagemDeErro('DonoCartao')}</small>
               </Campo>
@@ -238,26 +338,28 @@ const Checkout = () => {
               <ContainerCartao>
                 <Campo>
                   <label htmlFor="numeroCartao">Número do Cartão</label>
-                  <input
-                    type="text"
+                  <InputMask
+                    mask="9999 9999 9999 9999"
                     id="numeroCartao"
                     name="numeroCartao"
                     value={form.values.numeroCartao}
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
+                    disabled={isLoadingCheckout}
                   />
                   <small>{getMensagemDeErro('numeroCartao')}</small>
                 </Campo>
 
                 <Campo>
                   <label htmlFor="codigoCartao">CVV</label>
-                  <input
-                    type="text"
+                  <InputMask
+                    mask="999"
                     id="codigoCartao"
                     name="codigoCartao"
                     value={form.values.codigoCartao}
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
+                    disabled={isLoadingCheckout}
                   />
                   <small>{getMensagemDeErro('codigoCartao')}</small>
                 </Campo>
@@ -266,43 +368,54 @@ const Checkout = () => {
               <ContainerCartao>
                 <Campo>
                   <label htmlFor="mesExpiracao">Mês de vencimento</label>
-                  <input
-                    type="text"
+                  <InputMask
+                    mask="99"
                     id="mesExpiracao"
                     name="mesExpiracao"
                     value={form.values.mesExpiracao}
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
+                    disabled={isLoadingCheckout}
                   />
                   <small>{getMensagemDeErro('mesExpiracao')}</small>
                 </Campo>
 
                 <Campo>
                   <label htmlFor="anoExpiracao">Ano de vencimento</label>
-                  <input
-                    type="text"
+                  <InputMask
+                    mask="9999"
                     id="anoExpiracao"
                     name="anoExpiracao"
                     value={form.values.anoExpiracao}
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
+                    disabled={isLoadingCheckout}
                   />
                   <small>{getMensagemDeErro('anoExpiracao')}</small>
                 </Campo>
               </ContainerCartao>
 
-              <BotaoSubmit type="button" onClick={() => setStep(3)}>
-                Finalizar pagamento
+              <BotaoSubmit
+                type="submit"
+                disabled={isLoadingCheckout || !isStepValid()}
+              >
+                Finalizar Compra
               </BotaoSubmit>
-              <BotaoSubmit type="button" onClick={() => setStep(1)}>
+              <BotaoSubmit
+                type="button"
+                onClick={() => setStep(1)}
+                disabled={isLoadingCheckout}
+              >
                 Voltar para a edição de endereço
               </BotaoSubmit>
             </>
           )}
 
-          {step === 3 && (
+          {step === 3 && checkoutResponse && (
             <>
-              <Titulo>Pedido realizado! - {}</Titulo>
+              <Titulo>
+                Pedido realizado! - {checkoutResponse.orderId || 'N/A'}
+              </Titulo>
               <Paragrafo>
                 Estamos felizes em informar que seu pedido já está em processo
                 de preparação e, em breve, será entregue no endereço fornecido.
@@ -318,7 +431,7 @@ const Checkout = () => {
                 Esperamos que desfrute de uma deliciosa experiência
                 gastronômica.
               </Paragrafo>
-              <BotaoVoltar to="/" onClick={() => dispatch(fecharCheckout())}>
+              <BotaoVoltar to="/" onClick={handleConcluir}>
                 Concluir
               </BotaoVoltar>
             </>

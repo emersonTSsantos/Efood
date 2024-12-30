@@ -29,7 +29,8 @@ import {
   ModalContent,
   AddButton,
   Voltar,
-  ContainerVoltar
+  ContainerVoltar,
+  Carregando
 } from './styles'
 
 const Perfil = () => {
@@ -82,7 +83,11 @@ const Perfil = () => {
   }
 
   if (!restaurante) {
-    return <p>Carregando perfil...</p>
+    return (
+      <Carregando>
+        <div className="c-loader"></div>
+      </Carregando>
+    )
   }
 
   return (
