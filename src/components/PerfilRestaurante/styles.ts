@@ -332,11 +332,11 @@ export const Carregando = styled.div`
     height: 50px;
     border: 6px solid ${cores.laranjaClaro};
     border-radius: 50%;
-    border-top: ${cores.laranjaEscuro};
+    border-top-color: ${cores.laranjaEscuro};
 
     @keyframes is-rotating {
       to {
-        transform: rotate(1turn);
+        transform: rotate(2turn);
       }
     }
   }
