@@ -43,7 +43,7 @@ const Home = () => {
         <ListaDeRestaurantes restaurante={restaurantes} />
       ) : (
         <Carregando>
-          <div className="c-loader"></div>
+          <div></div>
         </Carregando>
       )}
     </>
