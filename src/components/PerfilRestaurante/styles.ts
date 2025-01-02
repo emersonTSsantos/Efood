@@ -321,6 +321,7 @@ export const AddButton = styled.button`
 
 export const Carregando = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 50px;
