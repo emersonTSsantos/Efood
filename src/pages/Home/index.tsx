@@ -43,7 +43,7 @@ const Home = () => {
         <ListaDeRestaurantes restaurante={restaurantes} />
       ) : (
         <Carregando>
-          <div></div>
+          <ListaDeRestaurantes restaurante={restaurantes} />
         </Carregando>
       )}
     </>
