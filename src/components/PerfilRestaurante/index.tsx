@@ -116,26 +116,24 @@ const Perfil = () => {
         </Container>
       </Hero>
 
-      <section>
-        <Container>
-          <CardsGrid>
-            {restaurante.cardapio.map((item: any) => (
-              <Card key={item.id}>
-                <CardImage src={item.foto} alt={item.nome} />
-                <CardContent>
-                  <CardTitle>{item.nome}</CardTitle>
-                  <CardDescription>
-                    {truncateDescription(item.descricao, 140)}
-                  </CardDescription>
-                  <AbrirModal onClick={() => handleOpenModal(item)}>
-                    Adicionar ao carrinho
-                  </AbrirModal>
-                </CardContent>
-              </Card>
-            ))}
-          </CardsGrid>
-        </Container>
-      </section>
+      <Container>
+        <CardsGrid>
+          {restaurante.cardapio.map((item: any) => (
+            <Card key={item.id}>
+              <CardImage src={item.foto} alt={item.nome} />
+              <CardContent>
+                <CardTitle>{item.nome}</CardTitle>
+                <CardDescription>
+                  {truncateDescription(item.descricao, 140)}
+                </CardDescription>
+                <AbrirModal onClick={() => handleOpenModal(item)}>
+                  Adicionar ao carrinho
+                </AbrirModal>
+              </CardContent>
+            </Card>
+          ))}
+        </CardsGrid>
+      </Container>
 
       {isModalOpen && pratoSelecionado && (
         <ModalBackdrop
