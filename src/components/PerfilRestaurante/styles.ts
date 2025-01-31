@@ -152,7 +152,7 @@ export const Card = styled.div`
   }
 
   @media (max-width: 750px) {
-    margin: 20px;
+    margin: 0 auto;
     width: 340px;
   }
 `
