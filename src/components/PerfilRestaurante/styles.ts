@@ -82,7 +82,7 @@ export const CartInfo = styled.p`
 `
 
 export const Container = styled.div`
-  max-width: 1024px;
+  max-width: 1080px;
   width: 100%;
   margin: 0 auto;
 `
@@ -145,7 +145,6 @@ export const Card = styled.div`
   overflow: hidden;
   flex-direction: column;
   justify-content: space-between;
-  margin: 16px;
   border: solid 8px;
 
   @media (max-width: 1024px) {
@@ -162,6 +161,7 @@ export const CardsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   margin-top: 56px;
+  grid-gap: 20px;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
