@@ -46,7 +46,7 @@ const Perfil = () => {
     const fetchRestaurante = async () => {
       try {
         const response = await axios.get(
-          `https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`
+          `https://ebac-fake-api.vercel.app/api/efood/restaurantes/${id}`
         )
         setRestaurante(response.data)
       } catch (error) {

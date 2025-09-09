@@ -112,7 +112,7 @@ const Checkout = () => {
 
     try {
       const response = await axios.post(
-        'https://fake-api-tau.vercel.app/api/efood/checkout',
+        'https://ebac-fake-api.vercel.app/api/efood/checkout',
         {
           delivery: {
             receiver: values.nome,
